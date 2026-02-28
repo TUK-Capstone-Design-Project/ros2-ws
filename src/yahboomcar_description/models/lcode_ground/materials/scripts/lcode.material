@@ -1,0 +1,16 @@
+material LCode/Pattern
+{
+  technique
+  {
+    pass
+    {
+      texture_unit
+      {
+        texture lcode-img.png
+        filtering anisotropic
+        max_anisotropy 16
+        scale 1 1 
+      }
+    }
+  }
+}

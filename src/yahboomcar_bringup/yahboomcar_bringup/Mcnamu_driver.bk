@@ -1,0 +1,110 @@
+#!/usr/bin/env python3
+# encoding: utf-8
+
+import rclpy
+from rclpy.node import Node
+from geometry_msgs.msg import Twist
+from std_msgs.msg import Int32, Bool, Int32MultiArray
+from yahboomcar_msgs.msg import ServoControl
+from Raspbot_Lib import Raspbot, LightShow
+
+class YahboomCarDriver(Node):
+    def __init__(self, name):
+        super().__init__(name)
+        self.car = Raspbot()
+        self.light_show = LightShow()
+
+        # Create subscribers
+        self.sub_cmd_vel = self.create_subscription(Twist, "cmd_vel", self.cmd_vel_callback, 1)
+        self.sub_RGBLight = self.create_subscription(Int32, "RGBLight", self.RGBLightcallback, 100)
+        self.sub_BUzzer = self.create_subscription(Bool, "Buzzer", self.Buzzercallback, 100)
+        self.sub_servo = self.create_subscription(ServoControl, "servo", self.servo_callback, 10)
+
+        # Create publishers
+        self.pub_line_sensor = self.create_publisher(Int32MultiArray, "line_sensor", 10)
+        self.pub_all_sensors = self.create_publisher(Int32MultiArray, "all_sensors", 10)
+
+        # Timer to publish all sensor data
+        self.timer = self.create_timer(0.1, self.pub_data)
+
+    def cmd_vel_callback(self, msg):
+        # Car motion control, subscriber callback function
+        if not isinstance(msg, Twist): return
+        # Issue linear vel and angular vel
+        vx = msg.linear.x * 1.0
+        vy = msg.linear.y * 1.0
+        vz = msg.angular.z * 1.0
+
+        speed_lr = -vy * 255
+        speed_fb = vx * 255
+        speed_spin = -vz * 120/4
+
+        r1 = speed_fb + speed_lr + speed_spin
+        r2 = speed_fb - speed_lr + speed_spin
+        r3 = speed_fb - speed_lr - speed_spin
+        r4 = speed_fb + speed_lr - speed_spin
+        # Assuming the motors are controlled by the IDs 0 and 1 for left, 2 and 3 for right
+        self.car.Ctrl_Muto(0, int(r1))
+        self.car.Ctrl_Muto(1, int(r2))
+        self.car.Ctrl_Muto(2, int(r3))
+        self.car.Ctrl_Muto(3, int(r4))
+
+    def RGBLightcallback(self, msg):
+        # RGBLight control
+        if not isinstance(msg, Int32): return
+        # Execute a specific light effect based on the message value
+        self.light_show.execute_effect('random_running', 10, 0.05, msg.data)
+
+    def Buzzercallback(self, msg):
+        if not isinstance(msg, Bool): return
+        if msg.data:
+            self.car.Ctrl_BEEP_Switch(1)
+        else:
+            self.car.Ctrl_BEEP_Switch(0)
+
+    def servo_callback(self, msg):
+        # Control both servos based on the received message
+        if not isinstance(msg, ServoControl): return
+        self.car.Ctrl_Servo(1, msg.servo_s1)
+        self.car.Ctrl_Servo(2, msg.servo_s2)
+
+    def pub_data(self):
+        # Read and publish all sensor data
+        # Example: Read line sensor data
+        track = self.car.read_data_array(0x0a, 1)
+        track = int(track[0])
+        x1 = (track >> 3) & 0x01
+        x2 = (track >> 2) & 0x01
+        x3 = (track >> 1) & 0x01
+        x4 = track & 0x01
+
+        # Example: Add more sensors here
+        # sensor2_data = self.read_sensor2_data()
+        # sensor3_data = self.read_sensor3_data()
+
+        # Combine all sensor data into one array
+        sensor_data = Int32MultiArray(data=[x2, x1, x3, x4])
+
+        #sensor_data = str(x1)+","+str(x2)+","+str(x3)+","+str(x4)
+        self.pub_line_sensor.publish(sensor_data)
+        # Publish all sensor data
+        #self.pub_all_sensors.publish(sensor_data)
+
+        # 添加日志输出
+        #self.get_logger().info(f'Published line sensor data: {sensor_data.data}')
+
+        
+
+def main(args=None):
+    rclpy.init(args=args)
+    driver = YahboomCarDriver('driver_node')
+    try:
+        rclpy.spin(driver)
+    except KeyboardInterrupt:
+        pass
+    finally:
+        driver.destroy_node()
+        rclpy.shutdown()
+
+""" if __name__ == '__main__':
+    main() """
