@@ -63,6 +63,7 @@ def generate_launch_description():
 
     # 4. 반환 (TimerAction 적용)
     return LaunchDescription([
+        set_gazebo_plugin_path,
         set_gazebo_model_path,
         robot_state_publisher_node,
         start_gazebo_cmd,
