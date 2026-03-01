@@ -8,7 +8,7 @@ set(SOURCE_FILES
 add_library(${LIB_NAME} ${SOURCE_FILES})
 
 target_include_directories(${LIB_NAME} PUBLIC
-    ${CMAKE_SOURCE_DIR}/src/include
+    include
     ${OpenCV_INCLUDE_DIRS}
 )
 target_link_libraries(${LIB_NAME} PUBLIC

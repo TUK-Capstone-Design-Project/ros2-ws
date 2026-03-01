@@ -7,7 +7,7 @@ set(SOURCE_FILES
 find_package(OpenCV REQUIRED)
 
 include_directories(
-    ${CMAKE_SOURCE_DIR}/src/include
+    include
     ${OpenCV_INCLUDE_DIRS}
 )
 

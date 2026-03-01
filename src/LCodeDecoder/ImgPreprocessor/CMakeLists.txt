@@ -7,7 +7,7 @@ set(SOURCE_FILES
 add_library(ImgPreprocessor ${SOURCE_FILES})
 
 target_include_directories(ImgPreprocessor PUBLIC
-    ${CMAKE_SOURCE_DIR}/src/include
+    include
     ${OpenCV_INCLUDE_DIRS}
 )
 target_link_libraries(ImgPreprocessor PUBLIC

@@ -7,7 +7,7 @@ find_package(OpenCV REQUIRED)
 add_library(Digitizer ${SOURCE_FILES})
 
 target_include_directories(Digitizer PUBLIC
-    ${CMAKE_SOURCE_DIR}/src/include
+    include
     ${OpenCV_INCLUDE_DIRS}
 )
 
