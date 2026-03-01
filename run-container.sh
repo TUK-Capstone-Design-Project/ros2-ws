@@ -42,6 +42,7 @@ $DOCKER_CMD run -dt \
     -v /tmp/.X11-unix:/tmp/.X11-unix:rw \
     -v "$SCRIPT_DIR:/home/$USER/colcon_ws$VOL_OPTS" \
     --device /dev/dri:/dev/dri \
+    --gpus all \
     $EXTRA_OPTS \
     $IMAGE_NAME
 
