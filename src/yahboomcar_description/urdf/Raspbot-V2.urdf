@@ -596,7 +596,7 @@ Stephen Brawner (brawner@gmail.com)
 
     <child link="global_shutter_camera" />
 
-    <origin xyz="0.07 0 0.035" rpy="0 1.5708 0" />
+    <origin xyz="0.08 0 0.035" rpy="0 1.5708 0" />
 
   </joint>
 
