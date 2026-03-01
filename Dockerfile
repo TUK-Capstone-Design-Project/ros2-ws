@@ -17,6 +17,7 @@ RUN apt update && apt upgrade -y && apt install -y \
     ros-humble-navigation2 \
     ros-humble-nav2-bringup \
     ros-humble-turtlebot3-msgs \
+    ros-humble-turtlebot3-simulations \
     # -----------------------------
     libopencv-dev \
     python3-opencv \
