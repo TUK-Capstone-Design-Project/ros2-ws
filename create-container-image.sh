@@ -24,6 +24,9 @@ TAG="latest"
 
 echo "--- [$DOCKER_CMD]를 사용하여 이미지를 빌드합니다: $IMAGE_NAME:$TAG ---"
 
+CONTAINER_NAME="raspbot-nav2-dev"
+
+$DOCKER_CMD rm -f $CONTAINER_NAME 2>/dev/null || true
 $DOCKER_CMD rmi raspbot-ros2-humble
 
 # 3. 빌드 수행
