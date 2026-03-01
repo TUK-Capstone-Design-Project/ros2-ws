@@ -27,3 +27,8 @@ if(BUILD_TESTING)
 endif()
 
 ament_package()
+
+install(DIRECTORY
+  params
+  DESTINATION share/${PROJECT_NAME}
+)
