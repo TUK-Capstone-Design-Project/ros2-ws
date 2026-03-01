@@ -47,14 +47,11 @@ RUN chown -R $USERNAME:$USERNAME /home/$USERNAME/.gazebo
 # 4. 일반 사용자로 전환
 USER $USERNAME
 
-# 환경 변수 자동 로드 및 그래픽 설정
+# 환경 변수 자동 로드
 RUN echo "source /opt/ros/humble/setup.bash" >> ~/.bashrc \
     && echo "if [ -f ~/colcon_ws/install/setup.bash ]; then source ~/colcon_ws/install/setup.bash; fi" >> ~/.bashrc \
-    && echo "export LIBGL_ALWAYS_SOFTWARE=1" >> ~/.bashrc \
-    && echo "export TURTLEBOT3_MODEL=burger" >> ~/.bashrc
-
-# 2. 환경 변수 추가 (기존 환경 변수 설정 섹션에 추가)
-RUN echo "export GAZEBO_MODEL_PATH=$GAZEBO_MODEL_PATH:/home/$USERNAME/.gazebo/models:/opt/ros/humble/share/turtlebot3_gazebo/models" >> ~/.bashrc \
+    && echo "export TURTLEBOT3_MODEL=burger" >> ~/.bashrc \
+    && echo "export GAZEBO_MODEL_PATH=$GAZEBO_MODEL_PATH:/home/$USERNAME/.gazebo/models:/opt/ros/humble/share/turtlebot3_gazebo/models" >> ~/.bashrc \
     && echo "export GAZEBO_RESOURCE_PATH=/usr/share/gazebo-11:/usr/share/gazebo_models" >> ~/.bashrc \
     && echo "export GAZEBO_MODEL_DATABASE_URI=''" >> ~/.bashrc
 
