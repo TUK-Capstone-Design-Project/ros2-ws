@@ -1,4 +1,4 @@
-FROM osrf/ros:humble-desktop-full
+FROM docker.io/osrf/ros:humble-desktop-full
 
 # 2. 새 사용자 생성 (호스트 유저와 UID/GID 맞춤)
 ARG USERNAME
