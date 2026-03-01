@@ -27,7 +27,7 @@ echo "--- [$DOCKER_CMD]를 사용하여 이미지를 빌드합니다: $IMAGE_NAM
 CONTAINER_NAME="raspbot-nav2-dev"
 
 $DOCKER_CMD rm -f $CONTAINER_NAME 2>/dev/null || true
-$DOCKER_CMD rmi raspbot-ros2-humble
+$DOCKER_CMD rmi raspbot-ros2-humble || true
 
 # 3. 빌드 수행
 # --no-cache 옵션은 필요할 때만 추가하세요.
