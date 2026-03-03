@@ -1,7 +1,6 @@
 #pragma once
 
 // I/O
-#include <format>
 #include <iostream>
 
 // STL

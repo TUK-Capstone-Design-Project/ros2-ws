@@ -14,6 +14,7 @@ bt_navigator:
 
 controller_server:
   ros__parameters:
+    transform_tolerance: 1.0
     use_sim_time: True
     controller_frequency: 50.0  # 2mm 정밀도를 위해 제어 주기를 50Hz로 상향
     min_x_velocity_threshold: 0.001
@@ -55,15 +56,16 @@ planner_server:
 local_costmap:
   local_costmap:
     ros__parameters:
+      transform_tolerance: 1.0
       update_frequency: 5.0
       publish_frequency: 2.0
       global_frame: map
       robot_base_frame: base_link
       use_sim_time: True
       rolling_window: true
-      width: 0.5               # 로봇 주변 50cm만 실시간 감시
-      height: 0.5
-      resolution: 0.002        # 지도와 동일한 2mm 해상도
+      width: 3               # 로봇 주변 50cm만 실시간 감시
+      height: 3
+      resolution: 0.01        # 지도와 동일한 2mm 해상도
       robot_radius: 0.1        # 로봇 크기
       plugins: ["static_layer", "inflation_layer"]
       static_layer:
@@ -76,6 +78,7 @@ local_costmap:
 global_costmap:
   global_costmap:
     ros__parameters:
+      transform_tolerance: 1.0
       update_frequency: 1.0
       publish_frequency: 1.0
       global_frame: map
@@ -90,3 +93,11 @@ global_costmap:
       inflation_layer:
         plugin: "nav2_costmap_2d::InflationLayer"
         inflation_radius: 0.1
+
+map_server:
+  ros__parameters:
+    use_sim_time: True
+    # 아래 라인을 추가하세요. 경로는 실제 파일 위치로 확인이 필요합니다.
+    yaml_filename: "" 
+    topic_name: "map"
+    frame_id: "map"

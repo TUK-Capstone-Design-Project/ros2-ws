@@ -1,0 +1,51 @@
+{
+    "Blob_Detector": {
+        "Filter": {
+            "Area": {
+                "enabled": false,
+                "max": 5000,
+                "min": 20
+            },
+            "Circularity": {
+                "enabled": true,
+                "max": 1.0,
+                "min": 0.800000011920929
+            },
+            "Convexity": {
+                "enabled": false,
+                "max": 1.0,
+                "min": 0.800000011920929
+            },
+            "Inertia": {
+                "enabled": false,
+                "max": 1.0,
+                "min": 0.10000000149011612
+            }
+        },
+        "Threshold": {
+            "max": 220,
+            "min": 60,
+            "minDistBetweenBlobs": 5,
+            "minRepeatability": 2,
+            "step": 15
+        }
+    },
+    "Debruijn_Params": {
+        "alpha": "0123",
+        "subCol": 7,
+        "subRow": 7
+    },
+    "Detection_Params": {
+        "EPS": 5.5,
+        "clusterDistanceTolerance": 40,
+        "line_size": 900,
+        "maxAngle": 17.0
+    },
+    "ROI": {
+        "ROI_height_dot": 13,
+        "ROI_width_dot": 13
+    },
+    "System": {
+        "LBS_Config_Path": "./"
+    }
+}

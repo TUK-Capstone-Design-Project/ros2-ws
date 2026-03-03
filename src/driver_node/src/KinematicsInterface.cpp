@@ -24,6 +24,30 @@ KinematicsInterface::KinematicsInterface(const std::string &device,
             << (int)i2c_addr_ << ")" << std::endl;
 }
 
+KinematicsInterface::KinematicsInterface(rclcpp::Node::SharedPtr node, 
+                                         const std::string &device,
+                                         uint8_t addr)
+    : fd_(-1), i2c_device_(device), i2c_addr_(addr) {
+
+  // 1. I2C 장치 파일 열기 시도
+  fd_ = open(i2c_device_.c_str(), O_RDWR);
+  
+  if (fd_ < 0) {
+    // 장치 열기 실패 시 시뮬레이션 모드로 전환
+    is_simulation_ = true;
+    RCLCPP_WARN(node->get_logger(), "I2C 장치를 찾을 수 없습니다. 시뮬레이션 모드로 동작합니다.");
+    
+    // Gazebo 로봇 제어를 위한 토픽 발행기 생성
+    sim_pub_ = node->create_publisher<geometry_msgs::msg::Twist>("/cmd_vel_sim", 10);
+  } else {
+    // 하드웨어 연결 성공 시 기존 I2C 설정 진행
+    if (ioctl(fd_, I2C_SLAVE, i2c_addr_) < 0) {
+      is_simulation_ = true;
+      close(fd_); fd_ = -1;
+    }
+  }
+}
+
 KinematicsInterface::~KinematicsInterface() {
   stop();
   if (fd_ >= 0) {
@@ -31,7 +55,7 @@ KinematicsInterface::~KinematicsInterface() {
   }
 }
 
-bool KinematicsInterface::is_connected() const { return fd_ >= 0; }
+bool KinematicsInterface::is_connected() const { return (fd_ >= 0) || is_simulation_; }
 
 void KinematicsInterface::stop() { drive(0.0, 0.0, 0.0); }
 
@@ -59,6 +83,16 @@ void KinematicsInterface::set_motor(int id, int speed) {
 }
 
 void KinematicsInterface::drive(double vx, double vy, double wz) {
+  if (is_simulation_) {
+    // 시뮬레이션 모드: Gazebo용 Twist 메시지 발행
+    geometry_msgs::msg::Twist msg;
+    msg.linear.x = vx;
+    msg.linear.y = vy;
+    msg.angular.z = wz;
+    sim_pub_->publish(msg);
+    return;
+  }
+
   if (fd_ < 0)
     return;
 

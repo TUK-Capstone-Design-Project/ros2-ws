@@ -1,4 +1,3 @@
-#pragma once
 #include "DeBruijnSeq/GenBGArray.hpp"
 
 // My libraries
@@ -10,7 +9,6 @@
 #include <cmath>
 #include <cstdlib>
 #include <filesystem>
-#include <format>
 #include <fstream>
 #include <functional>
 #include <iostream>
@@ -100,7 +98,7 @@ void BGArray::printBGArr(std::string filepath, std::string fileName) {
 
   std::ofstream writeFile(std::filesystem::u8path((const char *)(fileLocation).c_str()));
   if (!writeFile.is_open()) {
-    std::cerr << std::format("File open error.\n");
+    std::cerr << "File open error.\n";
     std::exit(1);
   }
 
@@ -111,7 +109,7 @@ void BGArray::printBGArr(std::string filepath, std::string fileName) {
 
     for (std::size_t j = 0; j < BGCols; j++) {
       if (j % (lineInterval + 1) == 0) {
-        writeFile << std::format("{} ", -1);
+        writeFile << "-1 ";
         colCorrection++;
         continue;
       }
@@ -119,7 +117,7 @@ void BGArray::printBGArr(std::string filepath, std::string fileName) {
       //     writeFile << std::format("{} ", 4);
       // }
       char val = sSeq[(sSeqLen * j + (i - countShift[j - colCorrection])) % sSeqLen];
-      writeFile << std::format("{} ", val);
+      writeFile << val << " ";
     }
     writeFile << "\n";
   }
@@ -141,17 +139,17 @@ void BGArray::printSpecificRange(const std::size_t &col1, const std::size_t &row
   }
 
   if (rowRange > BGRows || colRange > BGCols) {
-    std::cerr << std::format("Range error.\n");
+    std::cerr << "Range error.\n";
     return;
   }
 
   if (row1 > BGRows - 1 || row2 > BGRows - 1) {
-    std::cerr << std::format("Row size error.\n");
+    std::cerr << "Row size error.\n";
     return;
   }
 
   if (col1 > BGCols - 1 || col2 > BGCols - 1) {
-    std::cerr << std::format("Col size error.\n");
+    std::cerr << "Col size error.\n";
     return;
   }
 
@@ -165,7 +163,7 @@ void BGArray::printSpecificRange(const std::size_t &col1, const std::size_t &row
 
   std::ofstream writeFile(std::filesystem::u8path((const char *)fileLocation.c_str()));
   if (!writeFile.is_open()) {
-    std::cerr << std::format("File open error.\n");
+    std::cerr << "File open error.\n";
     std::exit(1);
   }
 
@@ -178,12 +176,12 @@ void BGArray::printSpecificRange(const std::size_t &col1, const std::size_t &row
         colCorrection++;
       }
       if (j % (lineInterval + 1) == 0) {
-        writeFile << std::format("{} ", -1);
+        writeFile << "-1 ";
         colCorrection++;
         continue;
       }
       char val = sSeq[(sSeqLen * j + (i - countShift[j - colCorrection])) % sSeqLen];
-      writeFile << std::format("{} ", val);
+      writeFile << val << " ";
     }
     writeFile << "\n";
   }
@@ -508,7 +506,9 @@ auto BGArray::printTSeq(std::string filepath) const -> void {
     }
   }
 
-  std::string filename     = std::format("{}x{}_AL{}_t-seq.txt", k1, k2, a.length());
+  std::string filename = std::to_string(k1) + "x" + 
+                       std::to_string(k2) + "_AL" + 
+                       std::to_string(a.length()) + "_t-seq.txt";
   std::string fileLocation = filepath + filename + ".txt";
 
   if (!std::filesystem::exists(filepath)) {
@@ -519,7 +519,7 @@ auto BGArray::printTSeq(std::string filepath) const -> void {
   std::ofstream writeFile(std::filesystem::u8path((const char *)fileLocation.c_str()));
 
   if (!writeFile.is_open()) {
-    std::cerr << std::format("File open error.\n");
+    std::cerr << "File open error.\n";
 
     std::exit(1);
   }
@@ -541,7 +541,9 @@ auto BGArray::printSSeq(std::string filepath) const -> void {
     }
   }
 
-  std::string filename     = std::format("{}x{}_AL{}_s-seq.txt", k1, k2, a.length());
+  std::string filename = std::to_string(k1) + "x" + 
+                       std::to_string(k2) + "_AL" + 
+                       std::to_string(a.length()) + "_s-seq.txt";
   std::string fileLocation = filepath + filename;
 
   if (!std::filesystem::exists(filepath)) {
@@ -551,7 +553,7 @@ auto BGArray::printSSeq(std::string filepath) const -> void {
   // std::string utf_8_to_euckr_fileLocation = utf8_to_euckr(fileLocation);
   std::ofstream writeFile(std::filesystem::u8path((const char *)fileLocation.c_str()));
   if (!writeFile.is_open()) {
-    std::cerr << std::format("File open error.\n");
+    std::cerr << "File open error.\n";
     std::exit(1);
   }
 
