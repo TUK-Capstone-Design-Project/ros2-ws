@@ -18,6 +18,7 @@ find_package(tf2 REQUIRED)
 find_package(tf2_ros REQUIRED)
 find_package(cv_bridge REQUIRED)      # ROS-OpenCV 브릿지
 find_package(OpenCV REQUIRED)         # OpenCV 라이브러리
+find_package(tf2_geometry_msgs REQUIRED)
 
 # 2. 실행 파일 생성 및 소스 등록
 # main/lcode_localizer_node.cpp 가 메인 파일임을 명시합니다.
@@ -34,7 +35,7 @@ add_executable(lcode_localizer_node
 
 # 3. 헤더 파일 포함 경로
 # LCodeDecoder/include를 루트로 잡으면 내부에서 "Common/Line.h" 식으로 접근 가능합니다.
-target_include_directories(lcode_localizer_node PUBLIC
+target_include_directories(lcode_localizer_node PRIVATE
   $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/LCodeDecoder/include>
   $<INSTALL_INTERFACE:include>
 )
@@ -53,6 +54,7 @@ ament_target_dependencies(lcode_localizer_node
 # OpenCV는 ament_target_dependencies가 아닌 target_link_libraries로 연결하는 것이 안전합니다.
 target_link_libraries(lcode_localizer_node
   ${OpenCV_LIBRARIES}
+  tf2_geometry_msgs::tf2_geometry_msgs
 )
 
 # 5. 설치 규칙

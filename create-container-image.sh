@@ -18,6 +18,15 @@ HOST_USER=$(whoami)
 HOST_UID=$(id -u)
 HOST_GID=$(id -g)
 
+
+# [수정 부분] 만약 현재 사용자가 root(0)라면 이름을 변경하여 충돌 방지
+if [ "$HOST_USER" = "root" ] || [ "$HOST_UID" = "0" ]; then
+    echo "--- 호스트가 root 계정이므로 컨테이너 사용자명을 'dev'로 설정합니다. ---"
+    HOST_USER="dev"
+    HOST_UID=1000
+    HOST_GID=1000
+fi
+
 # 2. 이미지 이름 설정
 IMAGE_NAME="raspbot-ros2-humble"
 TAG="latest"

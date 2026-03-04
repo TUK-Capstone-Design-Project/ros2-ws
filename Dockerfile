@@ -44,6 +44,20 @@ WORKDIR /home/$USERNAME/colcon_ws
 RUN chown -R $USERNAME:$USERNAME /home/$USERNAME/colcon_ws
 RUN chown -R $USERNAME:$USERNAME /home/$USERNAME/.gazebo
 
+
+# 3. 작업 디렉토리 설정
+WORKDIR /home/$USERNAME/colcon_ws
+
+# [중요!] 내 컴퓨터의 src 폴더를 도커 내부의 src 폴더로 복사합니다.
+# (Dockerfile이 있는 위치에 src 폴더가 있어야 합니다)
+COPY --chown=$USERNAME:$USER_GID src ./src
+
+# 소유권 변경 (혹시 모르니 다시 한 번 확인)
+RUN chown -R $USERNAME:$USER_GID /home/$USERNAME/colcon_ws
+
+# [선택 사항] 이미지 빌드 시점에 바로 컴파일까지 하고 싶다면 아래 내용 추가
+# RUN /bin/bash -c "source /opt/ros/humble/setup.bash && colcon build"
+
 # 4. 일반 사용자로 전환
 USER $USERNAME
 

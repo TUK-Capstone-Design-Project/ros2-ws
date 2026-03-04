@@ -1,12 +1,15 @@
 amcl:
   ros__parameters:
     use_sim_time: True
-    # L-Code가 직접 위치를 주므로 AMCL 대신 정적 좌표계를 사용하게 됩니다.
-    # 하지만 기본 구조를 위해 최소 설정을 남겨둡니다.
+    # AMCL이 켜져서 꼬이는 것을 방지하기 위해 타임아웃을 넉넉히 줍니다.
+    bond_timeout: 40.0
 
 bt_navigator:
   ros__parameters:
     use_sim_time: True
+    bond_timeout: 40.0        # 20초로 대폭 상향 (도커 환경 대응)
+    bt_loop_duration: 150     # 부하를 더 줄임
+    default_server_timeout: 2 # 2.0이 아니라 반드시 '2'라고 적어야 합니다!
     global_frame: map
     robot_base_frame: base_link
     odom_topic: /odom
@@ -14,77 +17,82 @@ bt_navigator:
 
 controller_server:
   ros__parameters:
-    transform_tolerance: 1.0
     use_sim_time: True
-    controller_frequency: 50.0  # 2mm 정밀도를 위해 제어 주기를 50Hz로 상향
+    bond_timeout: 40.0
+    topic_name: /cmd_vel
+    transform_tolerance: 5.0
+    controller_frequency: 5.0
     min_x_velocity_threshold: 0.001
-    min_y_velocity_threshold: 0.5
+    min_y_velocity_threshold: 0.001
     min_theta_velocity_threshold: 0.001
     failure_tolerance: 0.3
     progress_checker_plugin: "progress_checker"
     goal_checker_plugins: ["general_goal_checker"]
     controller_plugins: ["FollowPath"]
 
-    # 정밀 도착 설정 (Goal Checker)
     general_goal_checker:
       stateful: True
       plugin: "nav2_controller::SimpleGoalChecker"
-      xy_goal_tolerance: 0.005  # 5mm 이내 도착 시 정지 (점 간격이 2mm이므로 넉넉히 설정)
-      yaw_goal_tolerance: 0.05   # 약 3도 오차 허용
+      xy_goal_tolerance: 0.01
+      yaw_goal_tolerance: 0.05
       free_goal_velocity: False
 
-    # 경로 추종 설정 (RPP - Regulated Pure Pursuit 추천)
     FollowPath:
       plugin: "nav2_regulated_pure_pursuit_controller::RegulatedPurePursuitController"
-      desired_linear_vel: 0.15   # 실측 최대 0.2m/s이므로 안전하게 0.15 설정
-      lookahead_dist: 0.05       # 좁은 구역이므로 전방 주시 거리를 5cm로 짧게 설정
-      min_lookahead_dist: 0.02
-      max_lookahead_dist: 0.1
+      desired_linear_vel: 0.1
+      lookahead_dist: 0.06
+      min_lookahead_dist: 0.03
+      max_lookahead_dist: 0.15
       use_velocity_scaled_lookahead_dist: True
-      robot_radius: 0.1          # 로봇 반지름 (실제 크기에 맞춰 수정하세요)
+      robot_radius: 0.12
       inflation_cost_scaling_factor: 3.0
 
 planner_server:
   ros__parameters:
     use_sim_time: True
+    bond_timeout: 40.0
+    expected_planner_frequency: 5.0
     planner_plugins: ["GridBased"]
     GridBased:
       plugin: "nav2_navfn_planner/NavfnPlanner"
-      tolerance: 0.01          # 경로 생성 시 1cm 오차 허용
-      use_astar: True          # 최단 경로를 위해 A* 알고리즘 사용
+      tolerance: 0.01
+      use_astar: True
 
 local_costmap:
   local_costmap:
     ros__parameters:
-      transform_tolerance: 1.0
+      use_sim_time: True
+      bond_timeout: 40.0
+      transform_tolerance: 5.0
       update_frequency: 5.0
       publish_frequency: 2.0
       global_frame: map
       robot_base_frame: base_link
-      use_sim_time: True
       rolling_window: true
-      width: 3               # 로봇 주변 50cm만 실시간 감시
+      width: 3
       height: 3
-      resolution: 0.01        # 지도와 동일한 2mm 해상도
-      robot_radius: 0.1        # 로봇 크기
+      resolution: 0.01
+      robot_radius: 0.12
       plugins: ["static_layer", "inflation_layer"]
       static_layer:
         plugin: "nav2_costmap_2d::StaticLayer"
         map_subscribe_transient_local: True
       inflation_layer:
         plugin: "nav2_costmap_2d::InflationLayer"
-        inflation_radius: 0.05 # 벽(장애물) 근처 5cm 접근 금지
+        # inscribed radius(0.12)보다 크게 설정하여 에러 방지
+        inflation_radius: 0.15 
 
 global_costmap:
   global_costmap:
     ros__parameters:
-      transform_tolerance: 1.0
+      use_sim_time: True
+      bond_timeout: 40.0
+      transform_tolerance: 5.0
       update_frequency: 1.0
       publish_frequency: 1.0
       global_frame: map
       robot_base_frame: base_link
-      use_sim_time: True
-      robot_radius: 0.1
+      robot_radius: 0.12
       resolution: 0.002
       plugins: ["static_layer", "inflation_layer"]
       static_layer:
@@ -92,12 +100,35 @@ global_costmap:
         map_subscribe_transient_local: True
       inflation_layer:
         plugin: "nav2_costmap_2d::InflationLayer"
-        inflation_radius: 0.1
+        inflation_radius: 0.2
 
 map_server:
   ros__parameters:
     use_sim_time: True
-    # 아래 라인을 추가하세요. 경로는 실제 파일 위치로 확인이 필요합니다.
-    yaml_filename: "" 
+    bond_timeout: 40.0
+    yaml_filename: "/home/hhh/colcon_ws/src/lcode_localizer/params/lcode_map.yaml"
     topic_name: "map"
     frame_id: "map"
+
+
+behavior_server:
+  ros__parameters:
+    use_sim_time: True
+    bond_timeout: 40.0
+    cycle_frequency: 5.0
+    recovery_plugins: ["spin", "backup", "wait", "drive_on_heading"]
+    spin:
+      plugin: "nav2_behaviors/Spin"
+    backup:
+      plugin: "nav2_behaviors/BackUp"
+    wait:
+      plugin: "nav2_behaviors/Wait"
+    drive_on_heading:
+      plugin: "nav2_behaviors/DriveOnHeading"
+
+lifecycle_manager_navigation:
+  ros__parameters:
+    use_sim_time: True
+    autostart: True
+    node_names: ["controller_server", "smoother_server", "planner_server", "behavior_server", "bt_navigator", "waypoint_follower", "velocity_smoother"]
+    bond_timeout: 40.0

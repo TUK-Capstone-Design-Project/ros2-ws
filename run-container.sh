@@ -32,16 +32,26 @@ IMAGE_NAME="raspbot-ros2-humble"
 echo "--- 기존 컨테이너 '$CONTAINER_NAME' 정리 중... ---"
 $DOCKER_CMD rm -f $CONTAINER_NAME 2>/dev/null || true
 
-# 5. 컨테이너 실행 (백그라운드 -d 모드)
-echo "--- [$DOCKER_CMD] 컨테이너 실행 시작 ---"
+# 5. 컨테이너 실행 (WSL2 오버레이 마운트 대응 및 가속 설정)
 $DOCKER_CMD run -dt \
     --name $CONTAINER_NAME \
     --privileged \
     --net=host \
+    --shm-size=2gb \
     -e DISPLAY=$DISPLAY \
+    -e WAYLAND_DISPLAY=$WAYLAND_DISPLAY \
+    -e XDG_RUNTIME_DIR=$XDG_RUNTIME_DIR \
+    -e PULSE_SERVER=$PULSE_SERVER \
+    -e LD_LIBRARY_PATH=/usr/lib/wsl/lib:/usr/lib/x86_64-linux-gnu \
+    -e GALLIUM_DRIVER=d3d12 \
+    -e MESA_LOADER_DRIVER_OVERRIDE=d3d12 \
+    -e MESA_D3D12_DEFAULT_ADAPTER_NAME=NVIDIA \
+    -e MESA_GLX_FORCE_ALPHA_BITS=0 \
     -v /tmp/.X11-unix:/tmp/.X11-unix:rw \
+    -v /mnt/wslg:/mnt/wslg \
+    -v /usr/lib/wsl:/usr/lib/wsl:ro \
+    --device /dev/dxg:/dev/dxg \
     -v "$SCRIPT_DIR:/home/$USER/colcon_ws$VOL_OPTS" \
-    --device /dev/dri:/dev/dri \
     --gpus all \
     $EXTRA_OPTS \
     $IMAGE_NAME

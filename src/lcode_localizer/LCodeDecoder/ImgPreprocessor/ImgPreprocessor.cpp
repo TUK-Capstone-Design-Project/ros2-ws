@@ -3,7 +3,7 @@
 #include "ConfigSettings/ConfigSettings.hpp"
 using namespace std;
 
-#define SHOW_VIDEO
+// #define SHOW_VIDEO
 
 namespace LCODE {
 
