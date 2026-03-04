@@ -29,7 +29,9 @@ def generate_launch_description():
         output='screen',
         parameters=[{
             'use_sim_time': True,
-            'robot_description': robot_description_content
+            'robot_description': robot_description_content,
+            'publish_frequency': 50.0,  # [추가] 구독 빈도
+            'frame_prefix': ''          # TF 프리픽스 없음
         }]
     )
 

@@ -1,0 +1,212 @@
+#
+# This content is based on clang-format official documentation. 
+# See https://clang.llvm.org/docs/ClangFormatStyleOptions.html for details.
+#
+
+# BasedOnStyle (String)
+
+# AccessModifierOffset (Integer)
+AccessModifierOffset: -4
+# AlignAfterOpenBracket (BracketAlignmentStyle)
+AlignAfterOpenBracket: BlockIndent
+# AlignArrayOfStructures (ArrayInitializerAlignmentStyle)
+AlignArrayOfStructures: Right
+# AlignConsecutiveAssignments (AlignConsecutiveStyle)
+AlignConsecutiveAssignments: Consecutive
+# AlignConsecutiveBitFields (AlignConsecutiveStyle)
+# AlignConsecutiveDeclarations (AlignConsecutiveStyle)
+AlignConsecutiveDeclarations: true
+# AlignConsecutiveMacros (AlignConsecutiveStyle)
+AlignConsecutiveMacros: Consecutive
+# AlignEscapedNewlines (EscapedNewlineAlignmentStyle)
+# AlignOperands (OperandAlignmentStyle)
+# AlignTrailingComments (TrailingCommentsAlignmentStyle)
+AlignTrailingComments: Always
+# AllowAllArgumentsOnNextLine (Boolean)
+# AllowAllConstructorInitializersOnNextLine (Boolean)
+# AllowAllParametersOfDeclarationOnNextLine (Boolean)
+# AllowShortBlocksOnASingleLine (ShortBlockStyle)
+AllowShortBlocksOnASingleLine: Always
+# AllowShortCaseLabelsOnASingleLine (Boolean)
+# AllowShortEnumsOnASingleLine (Boolean)
+# AllowShortFunctionsOnASingleLine (ShortFunctionStyle)
+AllowShortFunctionsOnASingleLine: Inline
+# AllowShortIfStatementsOnASingleLine (ShortIfStyle)
+AllowShortIfStatementsOnASingleLine: AllIfsAndElse
+# AllowShortLambdasOnASingleLine (ShortLambdaStyle)
+# AllowShortLoopsOnASingleLine (Boolean)
+# AlwaysBreakAfterDefinitionReturnType (DefinitionReturnTypeBreakingStyle)
+# AlwaysBreakAfterReturnType (ReturnTypeBreakingStyle)
+# AlwaysBreakBeforeMultilineStrings (Boolean)
+# AlwaysBreakTemplateDeclarations (BreakTemplateDeclarationsStyle)
+AlwaysBreakTemplateDeclarations: Yes
+# AttributeMacros (List of Strings)
+
+# BinPackArguments (Boolean)
+# BinPackParameters (Boolean)
+# BitFieldColonSpacing (BitFieldColonSpacingStyle)
+# BraceWrapping (BraceWrappingFlags)
+# BracedInitializerIndentWidth (Unsigned)
+# BreakAfterAttributes (AttributeBreakingStyle)
+BreakAfterAttributes: Never
+# BreakAfterJavaFieldAnnotations (Boolean)
+# BreakArrays (Boolean)
+# BreakBeforeBinaryOperators (BinaryOperatorStyle)
+# BreakBeforeBraces (BraceBreakingStyle)
+BreakBeforeBraces: Linux
+# BreakBeforeConceptDeclarations (BreakBeforeConceptDeclarationsStyle)
+# BreakBeforeInlineASMColon (BreakBeforeInlineASMColonStyle)
+# BreakBeforeTernaryOperators (Boolean)
+# BreakConstructorInitializers (BreakConstructorInitializersStyle)
+BreakConstructorInitializers: AfterColon
+# BreakInheritanceList (BreakInheritanceListStyle)
+BreakInheritanceList: AfterComma
+# BreakStringLiterals (Boolean)
+
+# ColumnLimit (Unsigned)
+ColumnLimit: 0
+# CommentPragmas (String)
+# CompactNamespaces (Boolean)
+CompactNamespaces: false
+# ConstructorInitializerAllOnOneLineOrOnePerLine (Boolean)
+# ConstructorInitializerIndentWidth (Unsigned)
+# ContinuationIndentWidth (Unsigned)
+# Cpp11BracedListStyle (Boolean)
+Cpp11BracedListStyle: false
+
+# DeriveLineEnding (Boolean)
+# DerivePointerAlignment (Boolean)
+# DisableFormat (Boolean)
+
+# EmptyLineAfterAccessModifier (EmptyLineAfterAccessModifierStyle)
+EmptyLineAfterAccessModifier: Never
+# EmptyLineBeforeAccessModifier (EmptyLineBeforeAccessModifierStyle)
+EmptyLineBeforeAccessModifier: Always
+# ExperimentalAutoDetectBinPacking (Boolean)
+
+# FixNamespaceComments (Boolean)
+FixNamespaceComments: true
+# ForEachMacros (List of Strings)
+
+# IfMacros (List of Strings)
+# IncludeBlocks (IncludeBlocksStyle)
+# IncludeCategories (List of IncludeCategories)
+# IncludeIsMainRegex (String)
+# IncludeIsMainSourceRegex (String)
+# IndentAccessModifiers (Boolean)
+IndentAccessModifiers: false
+# IndentCaseBlocks (Boolean)
+IndentCaseBlocks: false
+# IndentCaseLabels (Boolean)
+IndentCaseLabels: false
+# IndentExternBlock (IndentExternBlockStyle)
+# IndentGotoLabels (Boolean)
+# IndentPPDirectives (PPDirectiveIndentStyle)
+IndentPPDirectives: BeforeHash
+# IndentRequiresClause (Boolean)
+# IndentWidth (Unsigned)
+IndentWidth: 4
+# IndentWrappedFunctionNames (Boolean)
+# InsertBraces (Boolean)
+# InsertNewlineAtEOF (Boolean)
+# InsertTrailingCommas (TrailingCommaStyle)
+# IntegerLiteralSeparator (IntegerLiteralSeparatorStyle)
+
+# JavaImportGroups (List of Strings)
+# JavaScriptQuotes (JavaScriptQuoteStyle)
+# JavaScriptWrapImports (Boolean)
+
+# KeepEmptyLinesAtEOF (Boolean)
+# KeepEmptyLinesAtTheStartOfBlocks (Boolean)
+
+# LambdaBodyIndentation (LambdaBodyIndentationKind)
+# Language (LanguageKind)
+# LineEnding (LineEndingStyle)
+
+# MacroBlockBegin (String)
+# MacroBlockEnd (String)
+# Macros (List of Strings)
+# MaxEmptyLinesToKeep (Unsigned)
+
+# NamespaceIndentation (NamespaceIndentationKind)
+# NamespaceMacros (List of Strings)
+
+# ObjCBinPackProtocolList (BinPackStyle)
+# ObjCBlockIndentWidth (Unsigned)
+# ObjCBreakBeforeNestedBlockParam (Boolean)
+# ObjCSpaceAfterProperty (Boolean)
+# ObjCSpaceBeforeProtocolList (Boolean)
+
+# PPIndentWidth (Integer)
+# PackConstructorInitializers (PackConstructorInitializersStyle)
+# PenaltyBreakAssignment (Unsigned)
+# PenaltyBreakBeforeFirstCallParameter (Unsigned)
+# PenaltyBreakComment (Unsigned)
+# PenaltyBreakFirstLessLess (Unsigned)
+# PenaltyBreakOpenParenthesis (Unsigned)
+# PenaltyBreakString (Unsigned)
+# PenaltyBreakTemplateDeclaration (Unsigned)
+# PenaltyExcessCharacter (Unsigned)
+# PenaltyIndentedWhitespace (Unsigned)
+# PenaltyReturnTypeOnItsOwnLine (Unsigned)
+# PointerAlignment (PointerAlignmentStyle)
+
+# QualifierAlignment (QualifierAlignmentStyle)
+# QualifierOrder (List of Strings)
+
+# RawStringFormats (List of RawStringFormats)
+# ReferenceAlignment (ReferenceAlignmentStyle)
+# ReflowComments (Boolean)
+# RemoveBracesLLVM (Boolean)
+# RemoveSemicolon (Boolean)
+# RequiresClausePosition (RequiresClausePositionStyle)
+# RequiresExpressionIndentation (RequiresExpressionIndentationKind)
+
+# SeparateDefinitionBlocks (SeparateDefinitionStyle)
+# ShortNamespaceLines (Unsigned)
+# SortIncludes (SortIncludesOptions)
+# SortJavaStaticImport (SortJavaStaticImportOptions)
+# SortUsingDeclarations (SortUsingDeclarationsOptions)
+# SpaceAfterCStyleCast (Boolean)
+# SpaceAfterLogicalNot (Boolean)
+# SpaceAfterTemplateKeyword (Boolean)
+# SpaceAroundPointerQualifiers (SpaceAroundPointerQualifiersStyle)
+# SpaceBeforeAssignmentOperators (Boolean)
+# SpaceBeforeCaseColon (Boolean)
+# SpaceBeforeCpp11BracedList (Boolean)
+SpaceBeforeCpp11BracedList: false
+# SpaceBeforeCtorInitializerColon (Boolean)
+# SpaceBeforeInheritanceColon (Boolean)
+# SpaceBeforeJsonColon (Boolean)
+# SpaceBeforeParens (SpaceBeforeParensStyle)
+# SpaceBeforeParensOptions (SpaceBeforeParensCustom)
+# SpaceBeforeRangeBasedForLoopColon (Boolean)
+SpaceBeforeRangeBasedForLoopColon: true
+# SpaceBeforeSquareBrackets (Boolean)
+# SpaceInEmptyBlock (Boolean)
+# SpaceInEmptyParentheses (Boolean)
+# SpacesBeforeTrailingComments (Unsigned)
+# SpacesInAngles (SpacesInAnglesStyle)
+SpacesInAngles: Never
+# SpacesInCStyleCastParentheses (Boolean)
+# SpacesInConditionalStatement (Boolean)
+SpacesInConditionalStatement: false
+# SpacesInContainerLiterals (Boolean)
+# SpacesInLineCommentPrefix (SpacesInLineComment)
+# SpacesInParentheses (Boolean)
+# SpacesInSquareBrackets (Boolean)
+# Standard (LanguageStandard)
+Standard: Latest
+# StatementAttributeLikeMacros (List of Strings)
+# StatementMacros (List of Strings)
+
+# TabWidth (Unsigned)
+# TypenameMacros (List of Strings)
+
+# UseCRLF (Boolean)
+# UseTab (UseTabStyle)
+UseTab: Never
+
+# VerilogBreakBetweenInstancePorts (Boolean)
+
+# WhitespaceSensitiveMacros (List of Strings)

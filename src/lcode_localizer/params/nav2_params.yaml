@@ -50,7 +50,7 @@ planner_server:
     planner_plugins: ["GridBased"]
     GridBased:
       plugin: "nav2_navfn_planner/NavfnPlanner"
-      tolerance: 0.01          # 경로 생성 시 1cm 오차 허용
+      tolerance: 0.002          # 경로 생성 시 1cm 오차 허용
       use_astar: True          # 최단 경로를 위해 A* 알고리즘 사용
 
 local_costmap:
@@ -65,7 +65,7 @@ local_costmap:
       rolling_window: true
       width: 3               # 로봇 주변 50cm만 실시간 감시
       height: 3
-      resolution: 0.01        # 지도와 동일한 2mm 해상도
+      resolution: 0.002        # 지도와 동일한 2mm 해상도
       robot_radius: 0.1        # 로봇 크기
       plugins: ["static_layer", "inflation_layer"]
       static_layer:
@@ -86,6 +86,7 @@ global_costmap:
       use_sim_time: True
       robot_radius: 0.1
       resolution: 0.002
+      robot_radius: 0.1
       plugins: ["static_layer", "inflation_layer"]
       static_layer:
         plugin: "nav2_costmap_2d::StaticLayer"

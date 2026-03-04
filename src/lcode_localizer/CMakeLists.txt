@@ -18,6 +18,7 @@ find_package(tf2 REQUIRED)
 find_package(tf2_ros REQUIRED)
 find_package(cv_bridge REQUIRED)      # ROS-OpenCV 브릿지
 find_package(OpenCV REQUIRED)         # OpenCV 라이브러리
+find_package(tf2_geometry_msgs REQUIRED)  # [추가]
 
 # 2. 실행 파일 생성 및 소스 등록
 # main/lcode_localizer_node.cpp 가 메인 파일임을 명시합니다.
@@ -48,6 +49,7 @@ ament_target_dependencies(lcode_localizer_node
   tf2
   tf2_ros
   cv_bridge
+  tf2_geometry_msgs
 )
 
 # OpenCV는 ament_target_dependencies가 아닌 target_link_libraries로 연결하는 것이 안전합니다.
