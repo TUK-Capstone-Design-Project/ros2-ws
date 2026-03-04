@@ -872,6 +872,11 @@ For more information, please see http://wiki.ros.org/sw_urdf_exporter -->
 
       <robot_base_frame>base_link</robot_base_frame>
 
+      <!-- [추가] 시뮬레이션 안정성을 위한 파라미터 -->
+      <max_wheel_acceleration>1.0</max_wheel_acceleration>
+      <max_wheel_torque>20</max_wheel_torque>
+      <odometry_source>1</odometry_source> <!-- 0: ENCODER, 1: WORLD (시뮬레이션에서는 WORLD가 정확함) -->
+
     </plugin>
 
   </gazebo>

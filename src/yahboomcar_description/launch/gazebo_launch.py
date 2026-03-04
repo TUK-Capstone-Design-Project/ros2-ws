@@ -14,6 +14,7 @@ def generate_launch_description():
     urdf_model_path = os.path.join(pkg_share, 'urdf', urdf_name)
     pkg_parent_path = os.path.join(pkg_share, '..')
     gazebo_models_path = os.path.join(pkg_share, 'models')
+    world_file = os.path.join(pkg_share, 'worlds', 'lcode_sim.world')
 
     # 1. 환경 변수 설정 (중복 보장)
     set_gazebo_plugin_path = SetEnvironmentVariable(
@@ -38,7 +39,7 @@ def generate_launch_description():
             'bash', '-c', 
             f'export GAZEBO_MODEL_PATH={pkg_parent_path}:{gazebo_models_path}:$GAZEBO_MODEL_PATH && '
             'export GAZEBO_PLUGIN_PATH=/opt/ros/humble/lib:$GAZEBO_PLUGIN_PATH && '
-            'gazebo --verbose -s libgazebo_ros_init.so -s libgazebo_ros_factory.so'
+            f'gazebo --verbose -s libgazebo_ros_init.so -s libgazebo_ros_factory.so {world_file}'
         ],
         output='screen'
     )

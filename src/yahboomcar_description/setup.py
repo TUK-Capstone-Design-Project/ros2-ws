@@ -15,6 +15,7 @@ setup(
         (os.path.join('share', package_name, 'urdf'), glob(os.path.join('urdf', '*.*'))),
         (os.path.join('share', package_name, 'meshes'), glob(os.path.join('meshes', '*.*'))),
         (os.path.join('share', package_name, 'rviz'), glob(os.path.join('rviz', '*.*'))),
+        (os.path.join('share', package_name, 'worlds'), glob(os.path.join('worlds', '*.*'))),
 
         # --- [추가] Gazebo 모델 파일들을 install 폴더로 복사 ---
         (os.path.join('share', package_name, 'models/lcode_ground'), glob('models/lcode_ground/*.sdf')),
