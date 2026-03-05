@@ -1,3 +1,4 @@
+#include <cmath>
 #include <cv_bridge/cv_bridge.h>
 #include <geometry_msgs/msg/transform_stamped.hpp>
 #include <nav_msgs/msg/odometry.hpp>
@@ -69,6 +70,27 @@ private:
 
         rclcpp::Time stamp = msg->header.stamp;
 
+        try {
+            geometry_msgs::msg::TransformStamped transform = tf_buffer_->lookupTransform(
+                "map", "base_link", tf2::TimePointZero
+            );
+
+            // Quaternion에서 Yaw 추출
+            tf2::Quaternion q(
+                transform.transform.rotation.x,
+                transform.transform.rotation.y,
+                transform.transform.rotation.z,
+                transform.transform.rotation.w
+            );
+
+            double current_yaw = tf2::getYaw(q);
+
+            RCLCPP_INFO(this->get_logger(), "Nav2의 현재 각도: %.3f rad (%.1f°)", current_yaw, current_yaw * 180.0 / M_PI);
+
+        } catch (tf2::TransformException &ex) {
+            RCLCPP_WARN(this->get_logger(), "TF 변환 실패: %s", ex.what());
+        }
+
         if (preprocessor_->run(src)) {
             if (digitizer_->runDigitize(*preprocessor_)) {
                 // 반환 형식이 std::tuple<double, double, double>인 경우 예시
@@ -82,24 +104,32 @@ private:
                 if (raw_x != -1 && raw_y != -1) {
                     // [수정] L-Code 좌표 (550×550, 좌상단 원점) -> ROS 좌표 (우상향 X, 상향 Y)
                     // 1. 중심 이동: (275, 275) -> (0, 0)
-                    double centered_x = raw_x - 275.0;
-                    double centered_y = raw_y - 275.0;
+                    // double centered_x = raw_x - 275.0;
+                    // double centered_y = raw_y - 275.0;
+
+                    static const double HALF_SIZE = 550.0 * 0.002 / 2.0;
 
                     // 2. 좌표계 회전: L-Code(→X, ↓Y) -> ROS(→X, ↑Y)
                     // L-Code의 Y축이 아래쪽이므로 반전 필요
-                    double ros_x = centered_x * 0.002;  // 우측이 +X
-                    double ros_y = -centered_y * 0.002; // 상단이 +Y
+                    double ros_x = raw_x * 0.002 - HALF_SIZE;           // -0.55 ~ +0.55
+                    double ros_y = (550 - raw_y) * 0.002 - HALF_SIZE;   // -0.55 ~ +0.55
 
                     // 2. 방향(Heading) 계산 (L-Code에서 준 angle 반영);
                     // last_th = raw_angle;
                     // L-Code 기준 각도를 ROS 라디안 단위로 변환이 필요할 수 있습니다.
                     // caemra_up_angle_ -> cv의 y,x좌표계 반영 ( 0도 부근에서 +, - 교차함)
-                    double raw_angle_rad = raw_angle * (M_PI / 180.0);
-                    double ros_angle_rad = -raw_angle_rad;
-                    last_th              = ros_angle_rad;
+                    double ros_angle_rad = -raw_angle * (M_PI / 180.0);
+                    ros_angle_rad        = std::atan2(std::sin(ros_angle_rad), std::cos(ros_angle_rad));
+
+                    last_x  = ros_x;
+                    last_y  = ros_y;
+                    last_th = ros_angle_rad;
 
                     initial_pos_found = true;
-                    std::cout << "L-Code 해독 성공  x: " << raw_x << " , y : " << raw_y << " angle : " << ros_angle_rad << "\n";
+                    RCLCPP_INFO(this->get_logger(), "L-Code 해독 성공  x: %d, y: %d, angle: %.1f°", raw_x, raw_y, raw_angle);
+                    RCLCPP_INFO(this->get_logger(), "map 좌표  x: %.3f m, y: %.3f m, angle: %.3f rad (%.1f°)", ros_x, ros_y, ros_angle_rad, -ros_angle_rad * 180.0 / M_PI);
+
+                    publish_all(last_x, last_y, last_th, this->get_clock()->now());
                 }
             }
         }
@@ -113,18 +143,61 @@ private:
 
     void publish_all(double map_x, double map_y, double map_th, const rclcpp::Time &stamp)
     {
-        // [중요] map -> odom 변환만 발행 (odom -> base_link는 Gazebo가 담당)
-        geometry_msgs::msg::TransformStamped t;
-        t.header.stamp    = stamp;
-        t.header.frame_id = "map";
-        t.child_frame_id  = "odom"; // ✓ base_link 아님!
+        // --- 카メ라 → base_link 오프셋 (URDF에서 확인 후 값 입력) ---
+        // 카메라가 base_link 기준으로 (cam_offset_x, cam_offset_y) 만큼 떨어져 있음
+        // 예: 카메라가 로봇 앞쪽 0.15m, 좌측 0.0m에 있다면
+        static const double cam_offset_x = 0.08; // URDF 확인 후 수정
+        static const double cam_offset_y = 0.0;  // URDF 확인 후 수정
 
-        t.transform.translation.x = map_x;
-        t.transform.translation.y = map_y;
+        // L-Code가 알려준 좌표는 카메라 위치(map 프레임)
+        // 로봇 중심(base_link) 위치로 변환
+        double cos_th = std::cos(map_th);
+        double sin_th = std::sin(map_th);
+
+        double base_x = map_x - (cos_th * cam_offset_x - sin_th * cam_offset_y);
+        double base_y = map_y - (sin_th * cam_offset_x + cos_th * cam_offset_y);
+        // base_th는 map_th와 동일 (카메라가 로봇과 같은 방향)
+        double base_th = map_th;
+
+        // --- 이하 base_x, base_y, base_th를 사용 ---
+        geometry_msgs::msg::TransformStamped odom_to_base;
+        try {
+            odom_to_base = tf_buffer_->lookupTransform(
+                "odom", "base_link", tf2::TimePointZero
+            );
+        } catch (const tf2::TransformException &ex) {
+            RCLCPP_WARN(this->get_logger(), "odom->base_link TF 조회 실패: %s", ex.what());
+            return;
+        }
+
+        double odom_x = odom_to_base.transform.translation.x;
+        double odom_y = odom_to_base.transform.translation.y;
+
+        tf2::Quaternion odom_q(
+            odom_to_base.transform.rotation.x,
+            odom_to_base.transform.rotation.y,
+            odom_to_base.transform.rotation.z,
+            odom_to_base.transform.rotation.w
+        );
+        double odom_th = tf2::getYaw(odom_q);
+
+        double delta_th = base_th - odom_th;
+        double cos_dt   = std::cos(delta_th);
+        double sin_dt   = std::sin(delta_th);
+
+        double corr_x = base_x - (cos_dt * odom_x - sin_dt * odom_y);
+        double corr_y = base_y - (sin_dt * odom_x + cos_dt * odom_y);
+
+        geometry_msgs::msg::TransformStamped t;
+        t.header.stamp            = stamp;
+        t.header.frame_id         = "map";
+        t.child_frame_id          = "odom";
+        t.transform.translation.x = corr_x;
+        t.transform.translation.y = corr_y;
         t.transform.translation.z = 0.0;
 
         tf2::Quaternion q;
-        q.setRPY(0.0, 0.0, map_th);
+        q.setRPY(0.0, 0.0, delta_th);
         t.transform.rotation.x = q.x();
         t.transform.rotation.y = q.y();
         t.transform.rotation.z = q.z();

@@ -51,8 +51,8 @@ void DriverNode::update_odometry() {
   // 2. TF 발행 (odom -> base_link)
   geometry_msgs::msg::TransformStamped t;
   t.header.stamp = now;
-  t.header.frame_id = "odom";
-  t.child_frame_id = "base_link";
+  t.header.frame_id = "map";
+  t.child_frame_id = "odom";
   t.transform.translation.x = x_;
   t.transform.translation.y = y_;
   t.transform.translation.z = 0.0;
@@ -72,7 +72,7 @@ void DriverNode::update_odometry() {
   odom.pose.pose.position.x = x_;
   odom.pose.pose.position.y = y_;
   odom.pose.pose.orientation = t.transform.rotation;
-  odom_publisher_->publish(odom);
+  // odom_publisher_->publish(odom);
 }
 
 void DriverNode::check_timeout() {

@@ -1,7 +1,7 @@
 image: lcode_map.pgm
 mode: trinary
 resolution: 0.002         # 1픽셀 당 2mm (점 사이의 실제 거리)
-origin: [-0.5, -0.5, 0.0]   # 좌상단 (0,0)을 지도의 (0,0,0) 좌표로 설정
+origin: [-0.551, -0.551, 0.0]   # 좌상단 (0,0)을 지도의 (0,0,0) 좌표로 설정
 negate: 0
 occupied_thresh: 0.65
 free_thresh: 0.25

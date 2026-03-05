@@ -423,7 +423,7 @@ For more information, please see http://wiki.ros.org/sw_urdf_exporter -->
 
 
     <axis
-      xyz="0 -1 0" />
+      xyz="0 1 0" />
 
 
   </joint>
@@ -532,7 +532,7 @@ For more information, please see http://wiki.ros.org/sw_urdf_exporter -->
 
 
     <axis
-      xyz="0 -1 0" />
+      xyz="0 1 0" />
 
 
   </joint>

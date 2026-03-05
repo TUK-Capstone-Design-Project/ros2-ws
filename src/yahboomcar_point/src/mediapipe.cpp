@@ -8,7 +8,7 @@
 #include <geometry_msgs/msg/point.h>
 
 
-#include <memory>78
+#include <memory>
 #include <string>
 using std::placeholders::_1;
 
