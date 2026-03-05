@@ -107,12 +107,12 @@ private:
                     // double centered_x = raw_x - 275.0;
                     // double centered_y = raw_y - 275.0;
 
-                    static const double HALF_SIZE = 550.0 * 0.002 / 2.0;
+                    static const double HALF_SIZE = 1000.0 * 0.002 / 2.0;
 
                     // 2. 좌표계 회전: L-Code(→X, ↓Y) -> ROS(→X, ↑Y)
                     // L-Code의 Y축이 아래쪽이므로 반전 필요
                     double ros_x = raw_x * 0.002 - HALF_SIZE;           // -0.55 ~ +0.55
-                    double ros_y = (550 - raw_y) * 0.002 - HALF_SIZE;   // -0.55 ~ +0.55
+                    double ros_y = (1000 - raw_y) * 0.002 - HALF_SIZE;   // -0.55 ~ +0.55
 
                     // 2. 방향(Heading) 계산 (L-Code에서 준 angle 반영);
                     // last_th = raw_angle;
