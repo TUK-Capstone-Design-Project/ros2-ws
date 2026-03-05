@@ -930,5 +930,37 @@ For more information, please see http://wiki.ros.org/sw_urdf_exporter -->
 
   </gazebo>
 
+  <!-- 로봇 색상 (Gazebo용) -->
+  <gazebo reference="base_link">
+    <material>Gazebo/DarkGrey</material>
+  </gazebo>
+
+  <gazebo reference="l1_Link">
+    <material>Gazebo/Yellow</material>
+  </gazebo>
+
+  <gazebo reference="l2__Link">
+    <material>Gazebo/Yellow</material>
+  </gazebo>
+
+  <gazebo reference="r1_Link">
+    <material>Gazebo/Yellow</material>
+  </gazebo>
+
+  <gazebo reference="r2_Link">
+    <material>Gazebo/Yellow</material>
+  </gazebo>
+
+  <gazebo reference="arm1_Link">
+    <material>Gazebo/Grey</material>
+  </gazebo>
+
+  <gazebo reference="arm2_Link">
+    <material>Gazebo/Grey</material>
+  </gazebo>
+
+  <gazebo reference="global_shutter_camera">
+    <material>Gazebo/Blue</material>
+  </gazebo>
 
 </robot>
