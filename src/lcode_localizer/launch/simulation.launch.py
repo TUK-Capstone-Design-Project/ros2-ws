@@ -84,11 +84,24 @@ def generate_launch_description():
         output='screen'
     )
 
+    app_bridge_node = Node(
+        package='app_bridge',
+        executable='app_bridge_node',
+        name='app_bridge_node',
+        output='screen',
+        parameters=[{
+            'use_sim_time': True,
+            'port': 5000,
+            'pose_publish_hz': 2.0,
+        }]
+    )
+
     return LaunchDescription([
         robot_state_publisher,
         joint_state_publisher,
         gazebo_launch,
         localizer_node,
         nav2_launch,
-        rviz_node
+        rviz_node,
+        app_bridge_node
     ])
