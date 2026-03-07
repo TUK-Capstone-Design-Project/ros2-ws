@@ -19,12 +19,12 @@
         // Podman을 위한 필수 옵션 (스크립트에 있던 내용)
         "--userns=keep-id",
         "-e", "DISPLAY=${localEnv:DISPLAY}",
-        "-v", "${localWorkspaceFolder}:/home/${localEnv:USER}/workspace:Z",
+        "-v", "${localWorkspaceFolder}:/home/${localEnv:USER}/colcon_ws:Z",
         "-v", "/tmp/.X11-unix:/tmp/.X11-unix:rw"
     ],
 
     "remoteUser": "${localEnv:USER}",
-    "workspaceFolder": "/home/${localEnv:USER}/workspace",
+    "workspaceFolder": "/home/${localEnv:USER}/colcon_ws",
 
     "customizations": {
         "vscode": {
