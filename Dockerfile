@@ -10,7 +10,7 @@ SHELL ["/bin/bash", "-c"]
 
 # 2. 필수 패키지 및 Nav2 의존성 설치
 RUN apt update && apt upgrade -y && apt install -y \
-    python3-pip \
+    clangd python3-pip jq \
     ros-humble-xacro \
     ros-humble-gazebo-ros-pkgs \
     ros-humble-cv-bridge \
@@ -32,6 +32,8 @@ RUN groupadd --gid $USER_GID $USERNAME \
     && useradd --uid $USER_UID --gid $USER_GID -m $USERNAME \
     && echo $USERNAME ALL=\(root\) NOPASSWD:ALL > /etc/sudoers.d/$USERNAME \
     && chmod 0440 /etc/sudoers.d/$USERNAME
+
+RUN usermod --shell /bin/bash $USERNAME
 
 # 1. Gazebo 공식 모델 및 TurtleBot3 모델 미리 다운로드 (바닥 추락 방지)
 RUN mkdir -p /home/$USERNAME/.gazebo/models && \
@@ -58,4 +60,4 @@ RUN echo "source /opt/ros/humble/setup.bash" >> ~/.bashrc \
 ENV DISPLAY=:0
 ENV QT_X11_NO_MITSHM=1
 
-CMD ["bash"]
+CMD ["/bin/bash"]

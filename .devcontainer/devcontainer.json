@@ -1,0 +1,41 @@
+{
+    "name": "ros2 humble ws",
+    "build": {
+        "dockerfile": "../Dockerfile",
+        "context": "..",
+        "args": {
+            "USERNAME": "${localEnv:USER}",
+            "USER_UID": "1000", // Podman 환경에선 명시적 숫자가 안전할 때가 많습니다
+            "USER_GID": "1000"
+        }
+    },
+    
+    "runArgs": [
+        "--privileged",
+        "--net=host",
+        "--shm-size=2gb",
+        "--gpus=all",
+        "--device=/dev/dri:/dev/dri",
+        // Podman을 위한 필수 옵션 (스크립트에 있던 내용)
+        "--userns=keep-id",
+        "-e", "DISPLAY=${localEnv:DISPLAY}",
+        "-v", "${localWorkspaceFolder}:/home/${localEnv:USER}/workspace:Z",
+        "-v", "/tmp/.X11-unix:/tmp/.X11-unix:rw"
+    ],
+
+    "remoteUser": "${localEnv:USER}",
+    "workspaceFolder": "/home/${localEnv:USER}/workspace",
+
+    "customizations": {
+        "vscode": {
+            "extensions": [
+                "ms-vscode.cpptools-extension-pack",
+                "llvm-vs-code-extensions.vscode-clangd",
+                "ms-azuretools.vscode-containers"
+            ]
+        }
+    },
+
+    // 컨테이너 실행 전
+    "initializeCommand": "xhost +local:podman"
+}

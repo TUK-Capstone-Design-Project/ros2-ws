@@ -4,6 +4,8 @@ project(driver_node)
 set(CMAKE_CXX_STANDARD 20)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
 
+set(CMAKE_EXPORT_COMPILE_COMMANDS ON)
+
 # 컴파일 옵션 설정
 if(CMAKE_COMPILER_IS_GNUCXX OR CMAKE_CXX_COMPILER_ID MATCHES "Clang")
   add_compile_options(-Wall -Wextra -Wpedantic -O3)
