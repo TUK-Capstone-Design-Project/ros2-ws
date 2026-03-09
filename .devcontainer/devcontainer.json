@@ -7,7 +7,10 @@
             "USERNAME": "${localEnv:USER}",
             "USER_UID": "1000", // Podman 환경에선 명시적 숫자가 안전할 때가 많습니다
             "USER_GID": "1000"
-        }
+        },
+        "options": [
+            "--format", "docker"
+        ]
     },
     
     "runArgs": [
