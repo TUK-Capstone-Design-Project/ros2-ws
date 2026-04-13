@@ -58,7 +58,7 @@ $DOCKER_CMD run -dt \
     -v /run/user/1000/bus:/run/user/1000/bus:rw \
     -v /tmp/.X11-unix:/tmp/.X11-unix:rw \
     -v $XDG_RUNTIME_DIR/$WAYLAND_DISPLAY:/run/user/1000/$WAYLAND_DISPLAY:rw \
-    -v "$PROJECT_DIR:/home/$USER_NAME/colcon_ws$VOL_OPTS" \
+    -v "$PROJECT_DIR:/home/$USER_NAME/workspace$VOL_OPTS" \
     --device /dev/dri:/dev/dri \
     $GPU_OPTS \
     $EXTRA_OPTS \

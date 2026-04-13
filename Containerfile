@@ -44,8 +44,8 @@ RUN mkdir -p /home/$USER_NAME/.gazebo/models && \
     rm -rf /home/$USER_NAME/.gazebo/models/gazebo_models_repo
 
 # 3. 작업 디렉토리 설정 및 소유권 변경
-WORKDIR /home/$USER_NAME/colcon_ws
-RUN chown -R $USER_NAME:$USER_NAME /home/$USER_NAME/colcon_ws
+WORKDIR /home/$USER_NAME/workspace
+RUN chown -R $USER_NAME:$USER_NAME /home/$USER_NAME/workspace
 RUN chown -R $USER_NAME:$USER_NAME /home/$USER_NAME/.gazebo
 
 RUN mkdir -p /run/user/1000 && chown -R $USER_NAME:$USER_NAME /run/user/1000

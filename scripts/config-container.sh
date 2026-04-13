@@ -6,7 +6,7 @@ PROJECT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")/.." && pwd)"
 # 이미지 및 컨테이너 이름 설정
 IMAGE_NAME="ros2-sdk"
 IMAGE_TAG="26.4.13"
-CONTAINER_NAME="ros2"
+CONTAINER_NAME="ros2-workspace"
 
 # 원격 설정 (Docker Hub 또는 개인 레지스트리)
 IMAGE_REPO="docker.io/hanch2396"
