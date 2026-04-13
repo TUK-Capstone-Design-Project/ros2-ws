@@ -6,7 +6,7 @@ ARG USER_UID
 ARG USER_GID
 
 # 2. 필수 패키지 및 Nav2 의존성 설치
-RUN apt update && apt upgrade -y && apt install -y \
+RUN apt-get update && apt-get upgrade -y && apt-get install -y \
     locales clangd python3-pip jq \
     ros-humble-xacro \
     ros-humble-gazebo-ros-pkgs \
