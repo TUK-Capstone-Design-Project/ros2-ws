@@ -55,7 +55,7 @@ USER $USER_NAME
 
 # 환경 변수 자동 로드
 RUN echo "source /opt/ros/humble/setup.bash" >> ~/.bashrc \
-    && echo "if [ -f ~/colcon_ws/install/setup.bash ]; then source ~/colcon_ws/install/setup.bash; fi" >> ~/.bashrc \
+    && echo "if [ -f ~/workspace/install/setup.bash ]; then source ~/workspace/install/setup.bash; fi" >> ~/.bashrc \
     && echo "export TURTLEBOT3_MODEL=burger" >> ~/.bashrc \
     && echo "export GAZEBO_MODEL_PATH=$GAZEBO_MODEL_PATH:/home/$USER_NAME/.gazebo/models:/opt/ros/humble/share/turtlebot3_gazebo/models" >> ~/.bashrc \
     && echo "export GAZEBO_RESOURCE_PATH=/usr/share/gazebo-11:/usr/share/gazebo_models" >> ~/.bashrc \
