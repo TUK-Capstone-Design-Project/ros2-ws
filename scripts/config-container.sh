@@ -5,17 +5,21 @@ PROJECT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")/.." && pwd)"
 
 # 이미지 및 컨테이너 이름 설정
 IMAGE_NAME="ros2-sdk"
-IMAGE_TAG="26.4.13"
+IMAGE_TAG="26.5.8"
 CONTAINER_NAME="ros2-workspace"
 
 # 원격 설정 (Docker Hub 또는 개인 레지스트리)
 IMAGE_REPO="docker.io/hanch2396"
 IMAGE_REMOTE="$IMAGE_REPO/$IMAGE_NAME:$IMAGE_TAG"
 
+# VSCode 확장 설정
+VSCODE_EXTENSIONS="
+    \"ms-vscode.cpptools-extension-pack\",
+    \"llvm-vs-code-extensions.vscode-clangd\"
+"
+
 # 컨테이너 사용자 설정
 USER_NAME="developer"
-USER_UID=1000
-USER_GID=1000
 
 # 사용할 도구(Docker 또는 Podman) 자동 감지
 if command -v podman >/dev/null 2>&1; then

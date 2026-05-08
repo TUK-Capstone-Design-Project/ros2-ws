@@ -2,8 +2,6 @@ FROM docker.io/osrf/ros:humble-desktop-full
 
 # 2. 새 사용자 생성 (호스트 유저와 UID/GID 맞춤)
 ARG USER_NAME
-ARG USER_UID
-ARG USER_GID
 
 # 2. 필수 패키지 및 Nav2 의존성 설치
 RUN apt-get update && apt-get upgrade -y && apt-get install -y \
@@ -30,9 +28,8 @@ RUN locale-gen en_US.UTF-8
 ENV LANG=en_US.UTF-8
 ENV LC_ALL=en_US.UTF-8
 
-RUN groupadd --gid $USER_GID $USER_NAME \
-    && useradd --uid $USER_UID --gid $USER_GID -m $USER_NAME \
-    && echo $USER_NAME ALL=\(root\) NOPASSWD:ALL > /etc/sudoers.d/$USER_NAME \
+RUN useradd -m -s /bin/bash -G sudo $USER_NAME \
+    && echo "$USER_NAME ALL=(ALL) NOPASSWD:ALL" > /etc/sudoers.d/$USER_NAME \
     && chmod 0440 /etc/sudoers.d/$USER_NAME
 
 RUN usermod --shell /bin/bash $USER_NAME
@@ -44,21 +41,16 @@ RUN mkdir -p /home/$USER_NAME/.gazebo/models && \
     rm -rf /home/$USER_NAME/.gazebo/models/gazebo_models_repo
 
 # 3. 작업 디렉토리 설정 및 소유권 변경
-WORKDIR /home/$USER_NAME/workspace
-RUN chown -R $USER_NAME:$USER_NAME /home/$USER_NAME/workspace
 RUN chown -R $USER_NAME:$USER_NAME /home/$USER_NAME/.gazebo
 
 RUN mkdir -p /run/user/1000 && chown -R $USER_NAME:$USER_NAME /run/user/1000
 
-# 4. 일반 사용자로 전환
-USER $USER_NAME
-
 # 환경 변수 자동 로드
-RUN echo "source /opt/ros/humble/setup.bash" >> ~/.bashrc \
-    && echo "if [ -f ~/workspace/install/setup.bash ]; then source ~/workspace/install/setup.bash; fi" >> ~/.bashrc \
-    && echo "export TURTLEBOT3_MODEL=burger" >> ~/.bashrc \
-    && echo "export GAZEBO_MODEL_PATH=$GAZEBO_MODEL_PATH:/home/$USER_NAME/.gazebo/models:/opt/ros/humble/share/turtlebot3_gazebo/models" >> ~/.bashrc \
-    && echo "export GAZEBO_RESOURCE_PATH=/usr/share/gazebo-11:/usr/share/gazebo_models" >> ~/.bashrc \
-    && echo "export GAZEBO_MODEL_DATABASE_URI=''" >> ~/.bashrc
+RUN echo "source /opt/ros/humble/setup.bash" >> /etc/profile.d/ros.sh \
+    && echo "if [ -f /home/$USER_NAME/workspace/install/setup.bash ]; then source /home/$USER_NAME/workspace/install/setup.bash; fi" >> /etc/profile.d/ros.sh \
+    && echo "export TURTLEBOT3_MODEL=burger" >> /etc/profile.d/ros.sh \
+    && echo "export GAZEBO_MODEL_PATH=$GAZEBO_MODEL_PATH:/home/$USER_NAME/.gazebo/models:/opt/ros/humble/share/turtlebot3_gazebo/models" >> /etc/profile.d/ros.sh \
+    && echo "export GAZEBO_RESOURCE_PATH=/usr/share/gazebo-11:/usr/share/gazebo_models" >> /etc/profile.d/ros.sh \
+    && echo "export GAZEBO_MODEL_DATABASE_URI=''" >> /etc/profile.d/ros.sh
 
 CMD ["/bin/bash"]
