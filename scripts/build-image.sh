@@ -12,6 +12,7 @@ echo "--- [$DOCKER_CMD]를 사용하여 이미지를 빌드합니다: $IMAGE_NAM
 # 빌드 수행
 # --no-cache 옵션은 필요할 때만 추가하세요.
 $DOCKER_CMD build \
+    "$@" \
     --pull=newer \
     --build-arg USER_NAME=$USER_NAME \
     -t "$IMAGE_NAME:$IMAGE_TAG" $PROJECT_DIR
