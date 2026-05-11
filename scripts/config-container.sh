@@ -21,6 +21,9 @@ VSCODE_EXTENSIONS="
 # 컨테이너 사용자 설정
 USER_NAME="developer"
 
+# 워크스페이스 디렉토리 설정 (컨테이너 내부)
+WORKSPACE_DIR="/home/${USER_NAME}/workspace"
+
 # 사용할 도구(Docker 또는 Podman) 자동 감지
 if command -v podman >/dev/null 2>&1; then
     DOCKER_CMD="podman"
