@@ -6,7 +6,7 @@ material LCode/Pattern
     {
       texture_unit
       {
-        texture lcode-img2.png
+        texture lcode-img.png
         filtering anisotropic
         max_anisotropy 16
         scale 1 1 
